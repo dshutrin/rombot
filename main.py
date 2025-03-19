@@ -1,3 +1,5 @@
+from time import sleep
+
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from config import *
@@ -109,4 +111,8 @@ def callback_handler(message):
 		bot.answer_callback_query(message.message.chat.id, 'Как ты сюда попал?...')
 
 
-bot.polling(none_stop=True)
+while True:
+	try:
+		bot.polling(none_stop=True)
+	except:
+		sleep(0.3)
