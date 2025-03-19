@@ -1,0 +1,3 @@
+token = '7842107146:AAEb1PMB9dmizW1k3czfFouJuZyGk10bLFA'
+chat_id = -1002221993570
+roma_id = 247372936
