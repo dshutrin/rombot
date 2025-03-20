@@ -31,12 +31,14 @@ def start(message):
 		else:
 			bot.send_message(
 				message.chat.id,
-				'Для использования бота вы должны вступить в наш Telegram канал.\nhttps://t.me/romatestchannel_dimpy\nВступите и напишите нам /start'
+				'Для использования бота вы должны вступить в наш Telegram канал.\nhttps://t.me/RomanLobovRHM\nВступите и напишите нам /start'
 			)
 
 
 @bot.message_handler(content_types=['text'])
 def message_handler(message):
+
+	print(message.chat.id, base.is_admin(message.chat.id), bot.get_chat_member(chat_id, message.chat.id).status)
 
 	if base.is_admin(message.chat.id):
 
@@ -62,7 +64,7 @@ def message_handler(message):
 			code = message.text
 			ans = base.get_answer(code)
 
-			bot.send_message(message.chat.id, f'Ответ: "{ans}"', reply_markup=admin_main_key)
+			bot.send_message(message.chat.id, f'Ответ:\n\n"{ans}"\nПришли мне следующий код =)', reply_markup=admin_main_key)
 			base.change_mode(message.chat.id, 'start')
 
 		elif base.get_mode(message.chat.id) == 'get_rm':
@@ -76,14 +78,14 @@ def message_handler(message):
 				base.change_mode(message.chat.id, 'start')
 
 	else:
-		if bot.get_chat_member(chat_id, message.chat.id).status == 'member':
+		if bot.get_chat_member(chat_id, message.chat.id).status in ('member', 'administrator'):
 			ans = base.get_answer(message.text)
 			if ans:
-				bot.send_message(message.chat.id, f'Ответ:\n\n{ans}')
+				bot.send_message(message.chat.id, f'Ответ:\n\n{ans}\nПришли мне следующий код =)')
 		else:
 			bot.send_message(
 				message.chat.id,
-				'Для использования бота вы должны вступить в наш Telegram канал.\nhttps://t.me/romatestchannel_dimpy\nВступите и напишите нам /start'
+				'Для использования бота вы должны вступить в наш Telegram канал.\nhttps://t.me/RomanLobovRHM\nВступите и напишите нам /start'
 			)
 
 
@@ -108,11 +110,13 @@ def callback_handler(message):
 			base.change_mode(message.message.chat.id, 'get_check')
 
 	else:
-		bot.answer_callback_query(message.message.chat.id, 'Как ты сюда попал?...')
+		bot.answer_callback_query(message.id)
+		bot.send_message(message.message.chat.id, 'Как ты сюда попал?...')
 
 
 while True:
 	try:
 		bot.polling(none_stop=True)
-	except:
+	except Exception as e:
+		print(e)
 		sleep(0.3)
